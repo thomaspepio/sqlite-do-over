@@ -21,6 +21,8 @@ description:         Please see the README on GitHub at <https://github.com/gith
 
 dependencies:
 - base >= 4.7 && < 5
+- megaparsec >= 9.0.0 && < 9.1
+- text >= 1.2.4.1 && < 1.3
 
 library:
   source-dirs: src
@@ -46,3 +48,5 @@ tests:
     - -with-rtsopts=-N
     dependencies:
     - sqlite-do-over
+    - hspec
+    - hspec-discover
