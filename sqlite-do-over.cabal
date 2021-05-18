@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 7c80cde52c7c8a7d7ce730b333d206bfd28bf1e0b4f31cb3765a9ae3c7eac26e
+-- hash: 8b2402dfcfa1576df7e1d8d748eabdea922bc3f6267683c7317182a812bc5b96
 
 name:           sqlite-do-over
 version:        0.1.0.0
@@ -27,7 +27,6 @@ source-repository head
 
 library
   exposed-modules:
-      Lib
       SqlParser
   other-modules:
       Paths_sqlite_do_over
@@ -57,7 +56,6 @@ test-suite sqlite-do-over-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
-      LibSpec
       SqlParserSpec
       Paths_sqlite_do_over
   hs-source-dirs:

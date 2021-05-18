@@ -10,9 +10,16 @@ import           Text.Megaparsec
 spec :: Spec
 spec = describe "Parsing a subset of the SQL grammar" $ do
 
-    it "fails" $ do
-        1 + 1 `shouldBe` 3
+    let runParserInTests parser str = runParser parser "tests-input" str
 
-    it "parses" $ do
-        runParser parseSelect "Select * from foo" (T.pack "tests")
-            `shouldBe` Right (Select [T.pack "*"] [T.pack "foo"])
+    describe "parsers" $ do
+
+        it "parseSelect" $ do
+            runParserInTests parseSelect "Select * from foo"
+                `shouldBe` Right (Select [T.pack "*"] [T.pack "foo"])
+
+        it "tables separator" $ do
+            runParserInTests tablesSeparator ", " `shouldBe` Right ()
+
+        it "comma" $ do
+            runParserInTests comma "," `shouldBe` Right (T.pack ",")
