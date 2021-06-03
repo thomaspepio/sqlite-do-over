@@ -5,7 +5,10 @@ module SqlParser
     , Table
     , SqlQuery(..)
     , parseSelect
-    , tablesSeparator
+    , columns
+    , column
+    , tables
+    , commaSeparator
     , comma
     ) where
 
@@ -17,16 +20,36 @@ import           Text.Megaparsec.Char
 type Column = T.Text
 type Table = T.Text
 
-data SqlQuery = Select [Column] [Table]
+data SqlQuery = Select [Column] [Table] -- SELECT col1, col2 FROM table1, table2
     deriving (Show, Eq)
 
 type Parser = Parsec Void T.Text
 
 parseSelect :: Parser SqlQuery
-parseSelect = undefined
+parseSelect = do
+    string "SELECT"
+    space
+    cols <- columns
+    space
+    string "FROM"
+    space
+    tabs <- tables
+    return $ Select cols tabs
 
-tablesSeparator :: Parser ()
-tablesSeparator = comma >> space
+columns :: Parser [Column]
+columns = many column
+
+column :: Parser Column
+column = do
+    col <- many alphaNumChar
+    commaSeparator <|> space
+    return $ T.pack col
+
+tables :: Parser [Table]
+tables = undefined
+
+commaSeparator :: Parser ()
+commaSeparator = comma >> space
 
 comma :: Parser T.Text
 comma = string (T.pack ",")
