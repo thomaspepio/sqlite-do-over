@@ -37,7 +37,7 @@ parseSelect = do
     return $ Select cols tabs
 
 columns :: Parser [Column]
-columns = many column
+columns = manyTill column (lookAhead "FROM")
 
 column :: Parser Column
 column = do
