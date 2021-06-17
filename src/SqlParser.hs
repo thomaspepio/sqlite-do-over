@@ -10,6 +10,7 @@ module SqlParser
     , tables
     , commaSeparator
     , comma
+    , table
     ) where
 
 import qualified Data.Text                     as T
@@ -20,7 +21,7 @@ import           Text.Megaparsec.Char
 type Column = T.Text
 type Table = T.Text
 
-data SqlQuery = Select [Column] [Table] -- SELECT col1, col2 FROM table1, table2
+data SqlQuery = Select [Column] [Table]
     deriving (Show, Eq)
 
 type Parser = Parsec Void T.Text
@@ -37,16 +38,22 @@ parseSelect = do
     return $ Select cols tabs
 
 columns :: Parser [Column]
-columns = manyTill column (lookAhead "FROM")
+columns = manyTextSepByComma column
 
 column :: Parser Column
-column = do
-    col <- many alphaNumChar
-    commaSeparator <|> space
-    return $ T.pack col
+column = manyText
 
 tables :: Parser [Table]
-tables = undefined
+tables = manyTextSepByComma table
+
+table :: Parser Table
+table = manyText
+
+manyText :: Parser T.Text
+manyText = T.pack <$> many alphaNumChar
+
+manyTextSepByComma :: Parser T.Text -> Parser [T.Text]
+manyTextSepByComma parser = parser `sepBy` commaSeparator
 
 commaSeparator :: Parser ()
 commaSeparator = comma >> space
