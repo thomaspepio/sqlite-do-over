@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.34.4.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 8b2402dfcfa1576df7e1d8d748eabdea922bc3f6267683c7317182a812bc5b96
+-- hash: ac55a88a2bc8f2247dd84456d60acffc1277c5fa65a2bdfeaeb2b6b3d0e9c519
 
 name:           sqlite-do-over
 version:        0.1.0.0
@@ -28,12 +28,14 @@ source-repository head
 library
   exposed-modules:
       SqlParser
+      Storage
   other-modules:
       Paths_sqlite_do_over
   hs-source-dirs:
       src
   build-depends:
       base >=4.7 && <5
+    , containers >=0.6.2.1 && <0.6.5
     , megaparsec >=9.0.0 && <9.1
     , text >=1.2.4.1 && <1.3
   default-language: Haskell2010
@@ -47,6 +49,7 @@ executable sqlite-do-over-exe
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
+    , containers >=0.6.2.1 && <0.6.5
     , megaparsec >=9.0.0 && <9.1
     , sqlite-do-over
     , text >=1.2.4.1 && <1.3
@@ -57,12 +60,14 @@ test-suite sqlite-do-over-test
   main-is: Spec.hs
   other-modules:
       SqlParserSpec
+      StorageSpec
       Paths_sqlite_do_over
   hs-source-dirs:
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
+    , containers >=0.6.2.1 && <0.6.5
     , hspec
     , hspec-discover
     , megaparsec >=9.0.0 && <9.1
