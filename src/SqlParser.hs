@@ -4,7 +4,9 @@ module SqlParser
     , Column
     , Table
     , SqlQuery(..)
+    , Value(..)
     , parseSelect
+    , parseInsert
     , columns
     , column
     , tables
@@ -22,6 +24,10 @@ type Column = T.Text
 type Table = T.Text
 
 data SqlQuery = Select [Column] [Table]
+              | Insert Table [Value T.Text]
+    deriving (Show, Eq)
+
+data Value a = StringV a
     deriving (Show, Eq)
 
 type Parser = Parsec Void T.Text
@@ -37,6 +43,17 @@ parseSelect = do
     tabs <- tables
     return $ Select cols tabs
 
+parseInsert :: Parser SqlQuery
+parseInsert = do
+    string "INSERT INTO"
+    space
+    singleTable <- table
+    space
+    string "VALUES("
+    vals <- values
+    string ")"
+    return $ Insert singleTable vals
+
 columns :: Parser [Column]
 columns = manyTextSepByComma column
 
@@ -48,6 +65,17 @@ tables = manyTextSepByComma table
 
 table :: Parser Table
 table = manyText
+
+singleValue :: Parser (Value T.Text)
+singleValue = do 
+    char '\'' 
+    chars <- manyTill asciiChar (char '\'')
+    let text = T.pack chars
+    return $ StringV text
+
+
+values :: Parser [Value T.Text]
+values = singleValue `sepBy` commaSeparator
 
 manyText :: Parser T.Text
 manyText = T.pack <$> many alphaNumChar

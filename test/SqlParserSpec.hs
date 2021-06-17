@@ -22,9 +22,17 @@ spec = describe "Parsing a subset of the SQL grammar" $ do
                                            (T.pack <$> ["baz", "qux"])
                                    )
 
-            it "parseSelect with wildcard columns and named table" $ do -- peut être qu'on ne veut pas
-                runParserInTests parseSelect "SELECT * FROM foo"        -- supporter la wildcart tout de suite ?
-                    `shouldBe` Right (Select [T.pack "*"] [T.pack "foo"])
+        describe "insert (in all table columns, and only string values)" $ do
+            it "parseInsert with named columns and tables" $ do
+                runParserInTests parseInsert
+                                 "INSERT INTO table1 VALUES('foo', 'bar')"
+                    `shouldBe` Right
+                                   (Insert
+                                       "table1"
+                                       [ StringV (T.pack "foo")
+                                       , StringV (T.pack "bar")
+                                       ]
+                                   )
 
         describe "reusable" $ do
             it "column" $ do
